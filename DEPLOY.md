@@ -1,6 +1,6 @@
 # Deploy — api-captacao-fieam
 
-Guia completo para subir a API no servidor de produção em `/opt/webstack/` com Caddy + Docker Compose e atualização via GitHub.
+Guia completo para subir a API no servidor de produção com Caddy + Docker Compose em `/opt/webstack/` e atualização via GitHub.
 
 ---
 
@@ -11,7 +11,7 @@ Guia completo para subir a API no servidor de produção em `/opt/webstack/` com
 | Nome do serviço | `api-captacao-fieam` |
 | Porta interna (container) | `3007` |
 | Domínio | `fieam-captacao.ippolo.com.br` |
-| Caminho no servidor | `/opt/webstack/app/api-captacao-fieam/` |
+| Caminho no servidor | `/opt/api-captacao-fieam/api-fieam/` |
 
 ---
 
@@ -49,18 +49,18 @@ git push -u origin main
 ### 3.1 Clonar o repositório
 
 ```bash
-mkdir -p /opt/webstack/app/api-captacao-fieam
-cd /opt/webstack/app
-git clone https://github.com/<seu-usuario>/api-captacao-fieam.git api-captacao-fieam
+mkdir -p /opt/api-captacao-fieam
+cd /opt/api-captacao-fieam
+git clone https://github.com/<seu-usuario>/api-captacao-fieam.git api-fieam
 ```
 
 ### 3.2 Criar o arquivo `.env` de produção
 
 ```bash
-cp /opt/webstack/app/api-captacao-fieam/.env.example \
-   /opt/webstack/app/api-captacao-fieam/.env
+cp /opt/api-captacao-fieam/api-fieam/.env.example \
+   /opt/api-captacao-fieam/api-fieam/.env
 
-nano /opt/webstack/app/api-captacao-fieam/.env
+nano /opt/api-captacao-fieam/api-fieam/.env
 ```
 
 Preencha com os valores reais de produção:
@@ -97,10 +97,10 @@ Adicione o bloco abaixo junto aos outros serviços:
 
 ```yaml
   api-captacao-fieam:
-    build: ./app/api-captacao-fieam
+    build: /opt/api-captacao-fieam/api-fieam
     container_name: api-captacao-fieam
     restart: always
-    env_file: ./app/api-captacao-fieam/.env
+    env_file: /opt/api-captacao-fieam/api-fieam/.env
     ports:
       - "3007:3007"
 ```
@@ -161,7 +161,7 @@ Resposta esperada:
 Sempre que houver uma nova versão no GitHub, execute no servidor:
 
 ```bash
-cd /opt/webstack/app/api-captacao-fieam
+cd /opt/api-captacao-fieam/api-fieam
 git pull origin main
 
 cd /opt/webstack
