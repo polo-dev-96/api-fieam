@@ -1,0 +1,8 @@
+services:
+  api-captacao-fieam:
+    build: .
+    container_name: api-captacao-fieam
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3007:3007"

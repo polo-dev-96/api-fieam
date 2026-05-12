@@ -85,25 +85,11 @@ MAX_PAGES=500
 
 ---
 
-## 4. Adicionar o Serviço ao `docker-compose.yml`
+## 4. `docker-compose.yml` do Projeto
 
-Edite `/opt/webstack/docker-compose.yml`:
+O projeto tem seu próprio `docker-compose.yml` — **não é necessário alterar o `docker-compose.yml` do webstack**. O Caddy já alcança serviços externos via `host.docker.internal`, que é o padrão de todos os outros apps no servidor.
 
-```bash
-nano /opt/webstack/docker-compose.yml
-```
-
-Adicione o bloco abaixo junto aos outros serviços:
-
-```yaml
-  api-captacao-fieam:
-    build: /opt/api-captacao-fieam/api-fieam
-    container_name: api-captacao-fieam
-    restart: always
-    env_file: /opt/api-captacao-fieam/api-fieam/.env
-    ports:
-      - "3007:3007"
-```
+O arquivo já está no repositório. No servidor ele ficará em `/opt/api-captacao-fieam/api-fieam/docker-compose.yml`.
 
 ---
 
@@ -129,12 +115,13 @@ fieam-captacao.ippolo.com.br {
 ## 6. Subir o Serviço pela Primeira Vez
 
 ```bash
-cd /opt/webstack
+cd /opt/api-captacao-fieam/api-fieam
 
-# Build e start apenas do novo serviço
-docker compose up -d --build api-captacao-fieam
+# Build e start
+docker compose up -d --build
 
 # Recarregar o Caddy para aplicar a nova entrada do domínio
+cd /opt/webstack
 docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 ```
 
@@ -142,7 +129,8 @@ docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 ```bash
 # Logs do container
-docker compose logs -f api-captacao-fieam
+cd /opt/api-captacao-fieam/api-fieam
+docker compose logs -f
 
 # Health check direto na porta
 curl http://localhost:3007/health
@@ -163,9 +151,7 @@ Sempre que houver uma nova versão no GitHub, execute no servidor:
 ```bash
 cd /opt/api-captacao-fieam/api-fieam
 git pull origin main
-
-cd /opt/webstack
-docker compose up -d --build api-captacao-fieam
+docker compose up -d --build
 ```
 
 > O `.env` de produção **não é sobrescrito** pelo `git pull` pois está no `.gitignore`.
@@ -176,12 +162,12 @@ docker compose up -d --build api-captacao-fieam
 
 | Ação | Comando |
 |---|---|
-| Ver logs em tempo real | `docker compose logs -f api-captacao-fieam` |
-| Reiniciar o container | `docker compose restart api-captacao-fieam` |
-| Parar o container | `docker compose stop api-captacao-fieam` |
-| Remover e recriar | `docker compose up -d --force-recreate api-captacao-fieam` |
-| Ver todos os containers | `docker compose ps` |
-| Recarregar Caddy | `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile` |
+| Ver logs em tempo real | `cd /opt/api-captacao-fieam/api-fieam && docker compose logs -f` |
+| Reiniciar o container | `cd /opt/api-captacao-fieam/api-fieam && docker compose restart` |
+| Parar o container | `cd /opt/api-captacao-fieam/api-fieam && docker compose stop` |
+| Remover e recriar | `cd /opt/api-captacao-fieam/api-fieam && docker compose up -d --force-recreate` |
+| Ver todos os containers | `docker ps` |
+| Recarregar Caddy | `cd /opt/webstack && docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile` |
 
 ---
 
