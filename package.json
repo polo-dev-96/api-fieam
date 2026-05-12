@@ -1,0 +1,22 @@
+{
+  "name": "api-alunos-sesisenai",
+  "version": "1.0.0",
+  "description": "API Node.js para consumir dados de Captacao da API DCM FIEAM - SESI e SENAI",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
